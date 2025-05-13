@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# 화려한 CSS 스타일
+# 화려한 CSS 스타일 및 애니메이션
 st.markdown("""
 <style>
 body {
@@ -19,22 +19,28 @@ body {
     padding: 2rem;
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 .job-card {
     background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
     border-radius: 15px;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    text-align: left;
-    transition: transform 0.3s;
+    margin: 1rem 0;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 .job-card:hover {
     transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
 }
 .job-card summary {
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
+    padding: 1rem;
     list-style: none;
+    outline: none;
 }
 .job-card summary::-webkit-details-marker {
     display: none;
@@ -46,6 +52,7 @@ body {
     padding: 1rem;
     font-size: 1rem;
     line-height: 1.4;
+    animation: fadeIn 0.4s ease-out;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -128,5 +135,21 @@ job_descriptions = {
     "📈 경영 컨설턴트": "기업의 문제를 분석하고 전략적 솔루션을 제안합니다.",
     "💼 CEO": "회사를 이끌며 비전 설정과 의사결정을 총괄합니다.",
     "📊 전략 기획자": "기업의 중장기 전략을 수립하고 실행 계획을 마련합니다.",
-    "🏢 기업 이사": "회사 운영의 주요 의사결정을 지원하고 감독합니다.
-"}
+    "🏢 기업 이사": "회사 운영의 주요 의사결정을 지원하고 감독합니다."
+}
+
+# 추천 표시
+st.markdown(f"## 🔎 {selected_mbti} 유형을 위한 추천 직업 🔍", unsafe_allow_html=True)
+for job in recommendations.get(selected_mbti, []):
+    desc = job_descriptions.get(job, "상세 설명이 준비 중입니다.")
+    html = f"""
+<details class="job-card">
+  <summary>{job}</summary>
+  <div class="job-desc">{desc}</div>
+</details>
+"""
+    st.markdown(html, unsafe_allow_html=True)
+
+# 푸터
+st.markdown("---")
+st.markdown("**당신의 꿈을 응원합니다! 🌟 새로운 커리어 여정, 지금 시작해보세요! 🚀**")
