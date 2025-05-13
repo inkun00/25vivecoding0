@@ -1,5 +1,4 @@
 import streamlit as st
-import random
 
 # 페이지 설정
 st.set_page_config(
@@ -46,7 +45,7 @@ mbti_list = [
     "🎯 ESTJ 🎯", "🔥 ENTJ 🔥", "🔍 ISFJ 🔍", "✨ ENFP ✨"
 ]
 
-# 사이드바
+# 사이드바 선택
 st.sidebar.markdown("## 🌈 성격 유형 선택")
 selected_mbti = st.sidebar.selectbox("당신의 MBTI를 선택하세요:", mbti_list)
 
@@ -70,13 +69,21 @@ recommendations = {
     "✨ ENFP ✨": ["🎨 그래픽 디자이너", "✈️ 여행 작가", "🎮 게임 개발자"],
 }
 
-# 추천 표시
+# 각 직업 설명 매핑 (예시)
+job_descriptions = {}
+for jobs in recommendations.values():
+    for job in jobs:
+        job_descriptions[job] = f"{job}은(는) 이 직업의 주요 역할과 필요 역량을 설명하는 자리입니다. 자신의 성향과 흥미를 고려해 선택해 보세요!"
+
+# 추천 표시 및 팝업
 st.markdown(f"## 🔎 {selected_mbti} 유형을 위한 추천 직업 🔍")
 cols = st.columns(3)
-jobs = recommendations.get(selected_mbti, [])
-for idx, job in enumerate(jobs):
+for idx, job in enumerate(recommendations.get(selected_mbti, [])):
     with cols[idx]:
-        st.markdown(f"<div class='job-card'><h3>{job}</h3></div>", unsafe_allow_html=True)
+        if st.button(job, key=f"{selected_mbti}_{idx}"):
+            with st.modal(job):
+                st.markdown(f"### {job}")
+                st.write(job_descriptions.get(job, "상세 설명이 준비 중입니다."))
 
 # 푸터
 st.markdown("---")
