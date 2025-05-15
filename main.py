@@ -4,19 +4,17 @@ import streamlit as st
 st.set_page_config(
     page_title="MBTI 동물 테스트 🐾",
     page_icon="🦄",
-    layout="centered",
+    layout="wide",
 )
 
-# CSS 스타일 (간단)
+# CSS 스타일 (넓은 레이아웃)
 st.markdown("""
 <style>
 .stApp {
-    max-width: 600px;
-    margin: auto;
-    padding: 1rem;
+    padding: 2rem;
 }
 .radio-label {
-    font-size: 1rem !important;
+    font-size: 1.1rem !important;
 }
 </style>
 """, unsafe_allow_html=True)
